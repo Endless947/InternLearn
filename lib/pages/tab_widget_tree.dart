@@ -1,42 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:interactive_learn/pages/tabs/home_page.dart';
 import 'package:interactive_learn/pages/tabs/profile_page.dart';
 import 'package:interactive_learn/pages/tabs/search_page.dart';
 
-class TabWidgetTree extends StatefulWidget {
+class TabWidgetTree extends HookWidget {
   const TabWidgetTree({super.key});
 
-  @override
-  State<TabWidgetTree> createState() => _TabWidgetTreeState();
-}
-
-class _TabWidgetTreeState extends State<TabWidgetTree> {
-  int _selectedIndex = 0;
-
- final List<Widget> _widgets = <Widget>[
+  static const _pages = [
     HomePage(),
     SearchPage(),
     ProfilePage(),
   ];
+
+  static const _titles = ['Home', 'Search', 'Profile'];
+
   @override
   Widget build(BuildContext context) {
+    final selectedIndex = useState(0);
+
     return Scaffold(
-      appBar: AppBar(title: Text('Tab Widget Tree')),
-      body: SingleChildScrollView(
-        child: _widgets[_selectedIndex],
+      appBar: AppBar(
+        title: Text(_titles[selectedIndex.value]),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+      body: _pages[selectedIndex.value],
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex.value,
+        onDestinationSelected: (index) => selectedIndex.value = index,
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home_outlined), selectedIcon: Icon(Icons.home), label: 'Home'),
+          NavigationDestination(icon: Icon(Icons.search_outlined), selectedIcon: Icon(Icons.search), label: 'Search'),
+          NavigationDestination(icon: Icon(Icons.person_outline), selectedIcon: Icon(Icons.person), label: 'Profile'),
         ],
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
       ),
     );
   }

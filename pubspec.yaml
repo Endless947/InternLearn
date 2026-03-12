@@ -43,6 +43,8 @@ dependencies:
   riverpod_annotation: ^4.0.2
   flutter_dotenv: ^6.0.0
   flutter_lints: ^6.0.0
+  # flutter_markdown: ^0.7.6
+  flutter_markdown_plus: ^1.0.7
   intl: ^0.20.2
   flutter_skeleton_ui: ^0.0.6
   flutter_debouncer: ^2.1.1

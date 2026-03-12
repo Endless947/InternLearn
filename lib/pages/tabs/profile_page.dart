@@ -1,75 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/providers/auth_provider.dart';
+import 'package:interactive_learn/core/singleton.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(currentUserProvider);
+    final email = user?.email ?? 'Unknown';
+    final displayName = email.split('@').first;
+
+    Future<void> handleLogout() async {
+      try {
+        await supabase.auth.signOut();
+        // AuthGate in main.dart will automatically navigate to LoginPage
+      } catch (e) {
+        logger.e('Logout error', error: e);
+      }
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
       child: Column(
-        spacing: 8,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 16),
           CircleAvatar(
-            minRadius: 80,
+            radius: 52,
+            backgroundColor: Theme.of(context).colorScheme.primaryContainer,
             child: Text(
-              "P",
-              style: Theme.of(
-                context,
-              ).textTheme.displayLarge!.copyWith(fontSize: 40),
+              displayName[0].toUpperCase(),
+              style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
+          const SizedBox(height: 16),
           Text(
-            "Prashant Suthar",
-            style: Theme.of(context).textTheme.headlineLarge,
+            displayName,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
+          const SizedBox(height: 4),
           Text(
-            'Username : prash-180206',
-            style: Theme.of(context).textTheme.bodyMedium,
+            email,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           ),
-
-          ListTile(
-            title: Text("Manage Profile"),
-            leading: Icon(Icons.person),
-            subtitle: Text("Edit/Update Profile"),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.chevron_right),
+          const SizedBox(height: 32),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.email_outlined),
+                  title: const Text('Email'),
+                  subtitle: Text(email),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+              ],
             ),
           ),
-
-          ListTile(
-            title: Text("Manage Notifications"),
-            subtitle: Text("notifications"),
-            leading: Icon(Icons.notifications),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.chevron_right),
+          const SizedBox(height: 12),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.person_outline),
+                  title: const Text('Manage Profile'),
+                  subtitle: const Text('Edit or update your profile'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {},
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                  ),
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.notifications_outlined),
+                  title: const Text('Notifications'),
+                  subtitle: const Text('Manage your notifications'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {},
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.brightness_6_outlined),
+                  title: const Text('Theme'),
+                  subtitle: const Text('Light / Dark mode'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {},
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(bottom: Radius.circular(12)),
+                  ),
+                ),
+              ],
             ),
           ),
-          ListTile(
-            title: Text("Theme"),
-            subtitle: Text("Dark/light theme"),
-            leading: Icon(Icons.sunny),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.chevron_right),
-            ),
-          ),
-          ListTile(
-            title: Text("Logout"),
-            leading: Icon(Icons.logout),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.chevron_right),
-            ),
-          ),
-          ListTile(
-            title: Text("Logout"),
-            leading: Icon(Icons.logout),
-            trailing: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.chevron_right),
+          const SizedBox(height: 12),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Logout', style: TextStyle(color: Colors.red)),
+              onTap: handleLogout,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
           ),
         ],

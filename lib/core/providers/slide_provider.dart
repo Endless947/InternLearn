@@ -4,6 +4,8 @@ import 'package:interactive_learn/core/models/slide_mcq.dart';
 import 'package:interactive_learn/core/services/slide_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'slide_provider.g.dart';
+
 class SlidesForSubtopic {
   final int subtopicId;
   final List<Slide> slides;
