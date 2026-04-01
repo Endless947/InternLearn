@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:interactive_learn/core/providers/auth_provider.dart';
+import 'package:interactive_learn/core/providers/theme_provider.dart';
 import 'package:interactive_learn/core/singleton.dart';
 import 'package:interactive_learn/screens/auth/login.dart';
 import 'package:interactive_learn/screens/tab_widget_tree.dart';
@@ -24,6 +25,7 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
     final ColorScheme colors = ColorScheme.fromSeed(
       seedColor: Colors.lightBlueAccent,
     );
@@ -97,7 +99,7 @@ class MyApp extends ConsumerWidget {
 
         iconTheme: const IconThemeData(color: Colors.white70),
       ),
-      themeMode: ThemeMode.light,
+      themeMode: themeMode,
       home: const AuthGate(),
     );
   }

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/providers/theme_provider.dart';
 
 /// UI-only theme picker. Selection is local; app theme is unchanged until wired later.
-class ThemeSettingsPage extends StatefulWidget {
+class ThemeSettingsPage extends ConsumerWidget {
   const ThemeSettingsPage({super.key});
 
   @override
-  State<ThemeSettingsPage> createState() => _ThemeSettingsPageState();
-}
-
-class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
-  ThemeMode _selected = ThemeMode.system;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selected = ref.watch(themeProvider);
+    final notifier = ref.read(themeProvider.notifier);
     final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
@@ -24,7 +21,7 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
         padding: const EdgeInsets.all(20),
         children: [
           Text(
-            'Choose how Intern Learn looks. This is a preview only — your choice is not saved yet.',
+            'Choose how Intern Learn looks. Your preference is saved to your account.',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: scheme.onSurfaceVariant,
                 ),
@@ -34,24 +31,24 @@ class _ThemeSettingsPageState extends State<ThemeSettingsPage> {
             icon: Icons.light_mode_outlined,
             title: 'Light',
             subtitle: 'Bright backgrounds, best in daylight',
-            selected: _selected == ThemeMode.light,
-            onTap: () => setState(() => _selected = ThemeMode.light),
+            selected: selected == ThemeMode.light,
+            onTap: () => notifier.setThemeMode(ThemeMode.light),
           ),
           const SizedBox(height: 12),
           _ThemeOptionCard(
             icon: Icons.dark_mode_outlined,
             title: 'Dark',
             subtitle: 'Easier on the eyes at night',
-            selected: _selected == ThemeMode.dark,
-            onTap: () => setState(() => _selected = ThemeMode.dark),
+            selected: selected == ThemeMode.dark,
+            onTap: () => notifier.setThemeMode(ThemeMode.dark),
           ),
           const SizedBox(height: 12),
           _ThemeOptionCard(
             icon: Icons.settings_suggest_outlined,
             title: 'System default',
             subtitle: 'Match your device setting',
-            selected: _selected == ThemeMode.system,
-            onTap: () => setState(() => _selected = ThemeMode.system),
+            selected: selected == ThemeMode.system,
+            onTap: () => notifier.setThemeMode(ThemeMode.system),
           ),
         ],
       ),

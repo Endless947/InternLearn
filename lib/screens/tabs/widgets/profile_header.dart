@@ -15,6 +15,8 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final trimmedName = displayName.trim();
+    final initial = trimmedName.isEmpty ? '?' : trimmedName[0].toUpperCase();
 
     return Container(
       width: double.infinity,
@@ -50,7 +52,7 @@ class ProfileHeader extends StatelessWidget {
               radius: 56,
               backgroundColor: scheme.primaryContainer,
               child: Text(
-                displayName[0].toUpperCase(),
+                initial,
                 style: textTheme.displaySmall?.copyWith(
                   color: scheme.onPrimaryContainer,
                   fontWeight: FontWeight.bold,

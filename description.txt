@@ -1,295 +1,146 @@
 ================================================================================
-                          INTERNLEARN — PROJECT DESCRIPTION
+                          INTERNLEARN - PROJECT DESCRIPTION
 ================================================================================
 
-Project Name   : InternLearn (Flutter package name: interactive_learn)
-Version        : 1.0.0+1
-Platform       : Flutter (Dart SDK ^3.10.7)
-Backend        : Supabase (PostgreSQL + Auth)
-Target Platforms: Android, iOS, Web, Windows, Linux, macOS
+Project Name    : InternLearn (package name: interactive_learn)
+Version         : 1.0.0+1
+Framework       : Flutter
+Backend         : Supabase
+Platforms       : Android, iOS, Web, Windows, Linux, macOS
 
 ================================================================================
 1. OVERVIEW
 ================================================================================
 
-InternLearn is a cross-platform mobile/desktop learning application built with
-Flutter and backed by Supabase. It is designed to help users (interns/students)
-study structured educational content organised into a hierarchy of Subjects →
-Chapters → Topics → Subtopics → Slides. The app supports three kinds of slides:
+InternLearn is a cross-platform learning application built with Flutter and
+Supabase. Learners navigate structured educational content in this hierarchy:
 
-  • Content Slides  – Markdown-rich reading material with key-points summaries.
-  • MCQ Slides      – Multiple-choice questions (A/B/C/D) with explanations.
-  • Match Slides    – Drag-and-drop style pair-matching exercises.
+  Subject -> Chapter -> Topic -> Subtopic -> Slides
 
-Interactive slide types (MCQ, Match) must be completed before the learner can
-proceed to the next slide, enforcing active engagement rather than passive
-reading.
+Supported slide types:
+
+  1. Content Slides (markdown + key points)
+  2. MCQ Slides (single-correct multiple choice with explanation)
+  3. Match Slides (pair matching interaction)
 
 ================================================================================
-2. TECHNOLOGY STACK
+2. CURRENT IMPLEMENTATION STATUS
 ================================================================================
 
-Framework      : Flutter (Material Design 3)
-Language       : Dart
-Backend-as-a-Service: Supabase
-  - Authentication  (email/password)
-  - PostgreSQL database (hosted)
-  - supabase_flutter ^2.12.0
+A) Authentication
+- Email/password sign up
+- Email/password login
+- Session-based routing with AuthGate
+- Logout from profile tab
 
-State Management:
-  - Riverpod (hooks_riverpod ^3.2.1, flutter_riverpod ^3.2.1)
-  - riverpod_annotation + riverpod_generator for code-gen providers
+B) Learning Content
+- Subject/chapter/topic/subtopic drill-down flow
+- Slide viewer with merged ordered sequence across slide types
+- Progress UI and gated interaction completion for MCQ/Match
 
-UI / Hooks:
-  - flutter_hooks ^0.21.3+1      – React-style hooks in Flutter widgets
-  - hooks_riverpod               – Combines Riverpod with flutter_hooks
-
-Code Generation:
-  - build_runner ^2.11.1
-  - freezed + freezed_annotation  – Immutable data classes / sealed unions
-  - json_serializable + json_annotation – JSON serialisation
-
-Other Packages:
-  - flutter_dotenv ^6.0.0         – .env file for secrets (Supabase URL & key)
-  - flutter_markdown_plus ^1.0.7  – Renders Markdown content in slides
-  - intl ^0.20.2                  – Internationalisation / date formatting
-  - flutter_skeleton_ui ^0.0.6    – Skeleton loading placeholders
-  - flutter_debouncer ^2.1.1      – Debounce for search input
-  - logger ^2.6.2                 – Structured logging
-  - cupertino_icons ^1.0.8        – iOS-style icons
-
-================================================================================
-3. PROJECT STRUCTURE
-================================================================================
-
-InternLearn/
-├── .env.example                  <- Template for environment variables
-├── pubspec.yaml                  <- Flutter package manifest & dependencies
-├── analysis_options.yaml         <- Dart linting rules
-├── assets/
-│   └── images/
-│       └── logo.png              <- App logo asset
-├── supabase/
-│   ├── config.toml               <- Supabase project configuration
-│   └── migrations/
-│       └── 20260312120938_remote_schema.sql  <- Full DB schema migration
-└── lib/
-    ├── main.dart                 <- App entry point + AuthGate routing
-    └── core/
-    │   ├── singleton.dart        <- Global Supabase client & logger singletons
-    │   ├── models/               <- Dart data models (Freezed)
-    │   │   ├── subject.dart
-    │   │   ├── chapter.dart
-    │   │   ├── topic.dart
-    │   │   ├── subtopic.dart
-    │   │   ├── slide.dart
-    │   │   ├── slide_mcq.dart
-    │   │   └── slide_match.dart
-    │   ├── services/             <- Data access layer (Supabase queries)
-    │   │   ├── subject_service.dart
-    │   │   ├── chapter_service.dart
-    │   │   ├── topic_service.dart
-    │   │   ├── subtopic_service.dart
-    │   │   └── slide_service.dart
-    │   └── providers/            <- Riverpod async providers (code-gen)
-    │       ├── auth_provider.dart
-    │       ├── content_provider.dart
-    │       └── slide_provider.dart
-    └── pages/
-        ├── tab_widget_tree.dart  <- Bottom navigation bar shell (3 tabs)
-        ├── input_demo.dart       <- Input/demo scratch page
-        ├── auth/
-        │   ├── login.dart        <- Login screen (email + password)
-        │   ├── signup.dart       <- Sign-up screen
-        │   └── widgets/          <- Shared auth UI widgets
-        ├── content/              <- Drill-down content browsing pages
-        │   ├── subjects_page.dart
-        │   ├── chapters_page.dart
-        │   ├── topics_page.dart
-        │   └── subtopics_page.dart
-        ├── slides/
-        │   ├── slide_viewer_page.dart  <- Main slide viewer (PageView)
-        │   └── widgets/
-        │       ├── content_slide.dart  <- Markdown content slide widget
-        │       ├── mcq_slide.dart      <- MCQ interactive slide widget
-        │       └── match_slide.dart    <- Match-pairs interactive slide widget
-        └── tabs/                 <- The 3 top-level tab screens
-            ├── home_page.dart    <- Greeting + subject grid dashboard
-            ├── search_page.dart  <- Live subject search
-            └── profile_page.dart <- User profile + logout
+C) Profile and Profile-Related Features
+- Profile tab now shows:
+  - Display name
+  - Email
+  - Bio
+  - Member since
+  - Short user id
+- Manage Profile page is functional:
+  - Edit display name and bio
+  - Persist changes using Supabase auth user metadata
+- Theme Settings page is functional:
+  - Light/Dark/System selection
+  - App-wide theme updates through Riverpod provider
+  - Preference persisted in user metadata
+- Notifications Settings page is functional:
+  - Email digest, new content, and reminders toggles
+  - Preference persisted in user metadata
+- Danger Zone is implemented:
+  - Delete account request confirmation dialog
+  - Records deletion request metadata
+  - Signs out user immediately
 
 ================================================================================
-4. DATABASE SCHEMA (Supabase / PostgreSQL)
+3. TECHNICAL ARCHITECTURE
 ================================================================================
 
-The database is hierarchical. Each table has an auto-generated integer primary
-key. Foreign keys use ON DELETE CASCADE where appropriate.
+Architecture pattern used:
 
-  subject
-  ├── id          INTEGER PK (sequence)
-  ├── name        VARCHAR(255) NOT NULL
-  └── description TEXT
+  Supabase Service/Data -> Riverpod Providers -> UI Screens/Widgets
 
-  chapter
-  ├── id             INTEGER PK (identity)
-  ├── subject_id     INTEGER FK → subject.id (CASCADE)
-  ├── chapter_number VARCHAR(10) NOT NULL
-  └── name           TEXT NOT NULL
-
-  topic
-  ├── id         INTEGER PK (identity)
-  ├── chapter_id INTEGER FK → chapter.id (CASCADE)
-  └── title      TEXT NOT NULL
-
-  subtopic
-  ├── id       INTEGER PK (sequence)
-  ├── topic_id INTEGER FK → topic.id
-  ├── title    VARCHAR(255) NOT NULL
-  └── order    INTEGER
-
-  slide                          ← content slide
-  ├── id          INTEGER PK
-  ├── subtopic_id INTEGER FK → subtopic.id (CASCADE)
-  ├── title       TEXT NOT NULL
-  ├── order       INTEGER NOT NULL
-  ├── body_md     JSONB NOT NULL   (rich Markdown body stored as JSON)
-  └── key_points  JSONB NOT NULL   (list of bullet-point summaries)
-
-  slide_mcq                      ← multiple-choice question slide
-  ├── id             INTEGER PK
-  ├── subtopic_id    INTEGER FK → subtopic.id
-  ├── question_md    TEXT NOT NULL
-  ├── option_a/b/c/d TEXT NOT NULL
-  ├── correct_option CHAR(1) CHECK IN ('a','b','c','d')
-  ├── explanation_md TEXT NOT NULL
-  └── order          INTEGER NOT NULL
-
-  slide_match                    ← match-the-pairs slide
-  ├── id             INTEGER PK
-  ├── subtopic_id    INTEGER FK → subtopic.id
-  ├── question       TEXT
-  ├── left_items     JSONB
-  ├── right_items    JSONB
-  ├── correct_pairs  JSONB
-  ├── explanation_md TEXT NOT NULL
-  └── order          BIGINT
-
-All tables grant SELECT/INSERT/UPDATE/DELETE to the anon, authenticated, and
-service_role Supabase roles (Row Level Security policies are not configured in
-the migration file; access is currently open at the database level).
+Important files for profile area:
+- lib/screens/tabs/profile_screen.dart
+- lib/screens/tabs/manage_profile_page.dart
+- lib/screens/tabs/notifications_settings_page.dart
+- lib/screens/tabs/theme_settings_page.dart
+- lib/screens/tabs/widgets/profile_about_card.dart
+- lib/screens/tabs/widgets/profile_danger_zone_card.dart
+- lib/screens/tabs/widgets/profile_email_card.dart
+- lib/screens/tabs/widgets/profile_header.dart
+- lib/core/providers/auth_provider.dart
+- lib/core/providers/theme_provider.dart
+- lib/core/providers/notifications_provider.dart
 
 ================================================================================
-5. AUTHENTICATION FLOW
+4. DATA PERSISTENCE NOTES (PROFILE)
 ================================================================================
 
-1. App starts → dotenv loads .env (SUPABASE_URL, SUPABASE_KEY).
-2. Supabase is initialised with those credentials.
-3. AuthGate (ConsumerWidget) watches authStateProvider (a Riverpod StreamProvider
-   wrapping Supabase's onAuthStateChange stream).
-4. If a valid session exists → TabWidgetTree (main app with bottom nav).
-5. If no session → LoginPage.
-6. Users can sign up (signup.dart) or log in (login.dart) with email + password.
-7. Logging out (ProfilePage) calls supabase.auth.signOut(); AuthGate
-   automatically reroutes to LoginPage.
+Profile-related settings are currently stored in Supabase auth user metadata:
+
+- display_name
+- bio
+- theme_mode
+- notif_email_digest
+- notif_new_content
+- notif_reminders
+- deletion_requested
+- deletion_requested_at
 
 ================================================================================
-6. CONTENT BROWSING FLOW
+5. VALIDATION STATUS
 ================================================================================
 
-HomePage (tab 1)
-  └─ SubjectsPage           (full list of all subjects)
-       └─ ChaptersPage      (chapters belonging to a subject)
-            └─ TopicsPage   (topics inside a chapter)
-                 └─ SubtopicsPage    (subtopics inside a topic)
-                      └─ SlideViewerPage  (slide-by-slide lesson viewer)
+Latest checks for current change set:
 
-SearchPage (tab 2) allows the user to filter subjects by name/description and
-jump directly into ChaptersPage for any matched subject.
-
-ProfilePage (tab 3) shows user avatar (first letter of email), email address,
-and settings stubs (Manage Profile, Notifications, Theme — not yet implemented),
-plus a red Logout button.
+- flutter analyze  -> PASS
+- flutter test     -> PASS
 
 ================================================================================
-7. SLIDE VIEWER (SlideViewerPage)
+6. FUTURE WORK (PROFILE AND PROFILE-RELATED)
 ================================================================================
 
-• Loads all three slide types for a subtopic in parallel via slidesProvider.
-• Merges them into a single ordered list using a sealed class hierarchy
-  (_ContentEntry, _McqEntry, _MatchEntry) and sorts by their `order` field.
-• Renders them in a PageView (swipe disabled; explicit Back/Next buttons used).
-• A segmented progress bar at the top of the AppBar shows overall lesson progress
-  with animated colour transitions (white = done, dim = incomplete).
-• Content slides are always unlocked (user can proceed freely).
-• MCQ and Match slides are gated — the Next button is disabled until the user
-  submits a correct or completed interaction.
-• Back navigation from the lesson prompts a confirmation dialog ("Leave lesson?")
-  warning that progress will not be saved.
-• On the final slide, "Finish" replaces "Next" and triggers a completion
-  celebration dialog with a trophy icon before returning to SubtopicsPage.
+1. Real account deletion backend flow
+- Replace metadata-only request with secure server-side deletion
+  (Edge Function or admin-controlled endpoint) and full data cleanup.
 
-================================================================================
-8. STATE MANAGEMENT (Riverpod)
-================================================================================
+2. Profile picture upload
+- Add image picker + Supabase Storage upload + avatar URL persistence.
 
-All providers are code-generated with @riverpod annotations:
+3. Stronger profile validation
+- Add display name format checks, bio moderation limits, and better error copy.
 
-  authStateProvider     — StreamProvider wrapping onAuthStateChange
-  currentUserProvider   — synchronous provider returning User?
-  subjectProvider       — FutureProvider<List<Subject>>
-  chapterProvider(id)   — FutureProvider<List<Chapter>> keyed by subjectId
-  topicProvider(id)     — FutureProvider<List<Topic>> keyed by chapterId
-  subtopicProvider(id)  — FutureProvider<List<Subtopic>> keyed by topicId
-  slidesProvider(id)    — FutureProvider<SlidesForSubtopic> keyed by subtopicId
-                          (fetches slides, MCQs, and match slides in parallel)
+4. Notification delivery integration
+- Wire saved preferences to actual push/email delivery logic.
 
-================================================================================
-9. ENVIRONMENT CONFIGURATION
-================================================================================
+5. Theme preference fallback logic
+- Improve behavior for logged-out users or first-time users with local fallback.
 
-Secrets are stored in a .env file (excluded from git via .gitignore) and loaded
-at startup by flutter_dotenv:
+6. Dedicated profile table
+- Move profile attributes from auth metadata to a public profile table with RLS,
+  while keeping sensitive auth data separate.
 
-  SUPABASE_URL=<your-supabase-project-url>
-  SUPABASE_KEY=<your-supabase-anon-key>
+7. Account security section
+- Add change password, re-auth prompts for sensitive actions, and session list.
 
-A .env.example file is provided as a template. The .env file is declared as an
-asset in pubspec.yaml so Flutter can bundle it.
+8. Better feedback and loading UX
+- Add optimistic updates where safe, retry actions, and clearer inline status.
 
-================================================================================
-10. MULTI-PLATFORM SUPPORT
-================================================================================
+9. Profile analytics and activity
+- Show learning stats, streak, completed lessons, and last active information.
 
-The project contains platform-specific folders for:
-  • android/   – Android build configuration
-  • ios/       – iOS build configuration
-  • web/       – Web (Flutter web) configuration
-  • windows/   – Windows desktop configuration
-  • linux/     – Linux desktop configuration
-  • macos/     – macOS desktop configuration
-
-Although all platforms are scaffolded, the primary target is mobile (Android/iOS).
-
-================================================================================
-11. DEVELOPMENT NOTES
-================================================================================
-
-• Run code generation after model changes:
-    flutter pub run build_runner build --delete-conflicting-outputs
-
-• Install dependencies:
-    flutter pub get
-
-• Run the app (debug):
-    flutter run
-
-• The app title displayed in the OS is "Intern Learn" (set in main.dart).
-
-• The colour seed for Material 3 theming is Colors.lightBlueAccent, producing a
-  blue-toned colour palette across the entire app.
-
-• The logger singleton (lib/core/singleton.dart) provides a global Logger
-  instance (from the logger package) available across all services/providers.
+10. Automated tests for profile flows
+- Add widget/integration tests for manage profile, theme persistence,
+  notifications save, and danger zone confirmation behavior.
 
 ================================================================================
 END OF DESCRIPTION
