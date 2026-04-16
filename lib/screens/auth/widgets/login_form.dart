@@ -53,7 +53,9 @@ class LoginForm extends HookConsumerWidget {
         const SizedBox(height: 8),
         Text(
           'Sign in to continue learning',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
@@ -64,7 +66,6 @@ class LoginForm extends HookConsumerWidget {
           decoration: InputDecoration(
             labelText: 'Email',
             prefixIcon: const Icon(Icons.email_outlined),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         const SizedBox(height: 12),
@@ -78,11 +79,12 @@ class LoginForm extends HookConsumerWidget {
             prefixIcon: const Icon(Icons.lock_outlined),
             suffixIcon: IconButton(
               icon: Icon(
-                obscurePassword.value ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                obscurePassword.value
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
               ),
               onPressed: () => obscurePassword.value = !obscurePassword.value,
             ),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         if (errorMessage.value != null) ...[

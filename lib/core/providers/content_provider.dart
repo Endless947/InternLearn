@@ -10,22 +10,22 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'content_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 FutureOr<List<Subject>> subject(Ref ref) {
   return SubjectService.fetchSubjects();
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FutureOr<List<Chapter>> chapter(Ref ref, int subjectId) {
   return ChapterService.fetchChapters(subjectId);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FutureOr<List<Topic>> topic(Ref ref, int chapterId) {
   return TopicService.fetchTopics(chapterId);
 }
 
-@riverpod
+@Riverpod(keepAlive: true)
 FutureOr<List<Subtopic>> subtopic(Ref ref, int topicId) {
   return SubtopicService.fetchSubtopics(topicId);
 }

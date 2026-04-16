@@ -63,7 +63,9 @@ class SignupForm extends HookConsumerWidget {
         const SizedBox(height: 8),
         Text(
           'Start your learning journey today',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 24),
@@ -74,7 +76,6 @@ class SignupForm extends HookConsumerWidget {
           decoration: InputDecoration(
             labelText: 'Email',
             prefixIcon: const Icon(Icons.email_outlined),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         const SizedBox(height: 12),
@@ -93,7 +94,6 @@ class SignupForm extends HookConsumerWidget {
               ),
               onPressed: () => obscurePassword.value = !obscurePassword.value,
             ),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         const SizedBox(height: 12),
@@ -105,7 +105,6 @@ class SignupForm extends HookConsumerWidget {
           decoration: InputDecoration(
             labelText: 'Confirm Password',
             prefixIcon: const Icon(Icons.lock_outlined),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
           ),
         ),
         if (errorMessage.value != null) ...[

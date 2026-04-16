@@ -3,10 +3,6 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:interactive_learn/core/providers/slide_provider.dart';
 import 'package:interactive_learn/screens/slides/widgets/slide_viewer_body.dart';
 
-// ── Sealed union: one entry per slide item sorted by order ───────────────────
-
-
-// ── Public page ───────────────────────────────────────────────────────────────
 
 class SlideViewerScreen extends HookConsumerWidget {
   final int subtopicId;
