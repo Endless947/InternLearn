@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/content/data/models/subject.dart';
-import 'package:interactive_learn/features/content/presentation/screens/chapters_screen.dart';
 
 class SubjectCard extends StatelessWidget {
   final Subject subject;
@@ -44,10 +44,7 @@ class SubjectCard extends StatelessWidget {
               )
             : null,
         trailing: const Icon(Icons.chevron_right),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ChaptersPage(subject: subject)),
-        ),
+        onTap: () => ChaptersRoute($extra: subject).push(context),
       ),
     );
   }

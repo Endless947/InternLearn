@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:interactive_learn/features/profile/data/riverpod/user_profile_provider.dart';
 import 'package:interactive_learn/features/auth/services/auth_service.dart';
@@ -72,7 +73,7 @@ class _AvatarPickerScreenState extends ConsumerState<AvatarPickerScreen> {
               await AuthService.updateProfile(avatarSeed: seed);
               ref.invalidate(userProfileProvider);
               if (!context.mounted) return;
-              Navigator.of(context).pop(seed);
+              context.pop(seed);
             },
             child: Ink(
               decoration: BoxDecoration(
@@ -103,7 +104,11 @@ class _AvatarPickerScreenState extends ConsumerState<AvatarPickerScreen> {
     );
   }
 
-  List<String> _generateAvatarSeeds(String baseSeed, int count, {String salt = ''}) {
+  List<String> _generateAvatarSeeds(
+    String baseSeed,
+    int count, {
+    String salt = '',
+  }) {
     final source = baseSeed.trim().isEmpty
         ? '${DateTime.now().microsecondsSinceEpoch}'
         : '${baseSeed}_$salt';

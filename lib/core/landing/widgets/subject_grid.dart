@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/content/data/models/subject.dart';
-import 'package:interactive_learn/features/content/presentation/screens/chapters_screen.dart';
 
 class SubjectGrid extends StatelessWidget {
   final List<Subject> subjects;
-  const SubjectGrid({super.key,required this.subjects});
+  const SubjectGrid({super.key, required this.subjects});
 
   static const List<Color> _palette = [
     Color(0xFF1565C0), // deep blue
@@ -31,10 +31,7 @@ class SubjectGrid extends StatelessWidget {
         final subject = subjects[index];
         final color = _palette[index % _palette.length];
         return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => ChaptersPage(subject: subject)),
-          ),
+          onTap: () => ChaptersRoute($extra: subject).push(context),
           child: Container(
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.08),
@@ -56,14 +53,18 @@ class SubjectGrid extends StatelessWidget {
                 const Spacer(),
                 Text(
                   subject.name,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (subject.description != null)
                   Text(
                     subject.description!,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    style: Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: Colors.grey),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -75,5 +76,3 @@ class SubjectGrid extends StatelessWidget {
     );
   }
 }
-
-

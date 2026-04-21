@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/auth/data/riverpod/auth_provider.dart';
 import 'package:interactive_learn/core/theme/riverpod/theme_provider.dart';
 import 'package:interactive_learn/features/profile/data/riverpod/user_profile_provider.dart';
 import 'package:interactive_learn/core/singleton.dart';
 import 'package:interactive_learn/core/skeleton/loading_skeletons.dart';
-import 'package:interactive_learn/features/profile/presentation/screens/edit_profile_screen.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -65,41 +65,43 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 16),
               Text(
                 displayName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 4),
               Text(
                 profile?.email.isNotEmpty == true ? profile!.email : email,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium
-                    ?.copyWith(color: Colors.grey),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
               ),
               const SizedBox(height: 8),
               Text(
                 'XP: ${profile?.totalXp ?? 0}',
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
               const SizedBox(height: 24),
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Column(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.email_outlined),
                       title: const Text('Email'),
-                      subtitle: Text(profile?.email.isNotEmpty == true
-                          ? profile!.email
-                          : email),
+                      subtitle: Text(
+                        profile?.email.isNotEmpty == true
+                            ? profile!.email
+                            : email,
+                      ),
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12)),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                   ],
                 ),
@@ -107,25 +109,24 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Column(
                   children: [
                     ListTile(
                       leading: const Icon(Icons.person_outline),
                       title: const Text('Manage Profile'),
-                      subtitle:
-                          const Text('Edit your name and choose a fun avatar'),
+                      subtitle: const Text(
+                        'Edit your name and choose a fun avatar',
+                      ),
                       trailing: const Icon(Icons.chevron_right),
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const EditProfileScreen(),
-                          ),
-                        );
+                        const EditProfileRoute().push(context);
                       },
                       shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(12)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
                       ),
                     ),
                     const Divider(height: 1),
@@ -146,8 +147,9 @@ class ProfileScreen extends ConsumerWidget {
                         theme.toggleTheme();
                       },
                       shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(12)),
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(12),
+                        ),
                       ),
                     ),
                   ],
@@ -156,14 +158,18 @@ class ProfileScreen extends ConsumerWidget {
               const SizedBox(height: 12),
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: ListTile(
                   leading: const Icon(Icons.logout, color: Colors.red),
-                  title:
-                      const Text('Logout', style: TextStyle(color: Colors.red)),
+                  title: const Text(
+                    'Logout',
+                    style: TextStyle(color: Colors.red),
+                  ),
                   onTap: handleLogout,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ],

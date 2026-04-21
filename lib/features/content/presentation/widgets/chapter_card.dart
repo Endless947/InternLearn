@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/content/data/models/chapter.dart';
 import 'package:interactive_learn/features/content/data/models/subject.dart';
-import 'package:interactive_learn/features/content/presentation/screens/topics_screen.dart';
 
 class ChapterCard extends StatelessWidget {
   final Subject subject;
@@ -27,12 +27,9 @@ class ChapterCard extends StatelessWidget {
 
     return InkWell(
       borderRadius: BorderRadius.circular(20),
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => TopicsScreen(subject: subject, chapter: chapter),
-        ),
-      ),
+      onTap: () => TopicsRoute(
+        $extra: TopicsNavData(subject: subject, chapter: chapter),
+      ).push(context),
       child: Ink(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -44,9 +41,7 @@ class ChapterCard extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          border: Border.all(
-            color: badgeColor.withValues(alpha: 0.25),
-          ),
+          border: Border.all(color: badgeColor.withValues(alpha: 0.25)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.06),

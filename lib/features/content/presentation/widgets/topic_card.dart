@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/content/data/models/chapter.dart';
 import 'package:interactive_learn/features/content/data/models/subject.dart';
 import 'package:interactive_learn/features/content/data/models/topic.dart';
-import 'package:interactive_learn/features/content/presentation/screens/subtopics_screen.dart';
 
 class TopicCard extends StatelessWidget {
   final Subject subject;
@@ -30,16 +30,13 @@ class TopicCard extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
-        onTap: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SubtopicsScreen(
-              subject: subject,
-              chapter: chapter,
-              topic: topic,
-            ),
+        onTap: () => SubtopicsRoute(
+          $extra: SubtopicsNavData(
+            subject: subject,
+            chapter: chapter,
+            topic: topic,
           ),
-        ),
+        ).push(context),
         child: Ink(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
@@ -79,7 +76,11 @@ class TopicCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                   if (isCompleted)
-                    const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                    const Icon(
+                      Icons.check_circle,
+                      color: Colors.green,
+                      size: 18,
+                    ),
                   const Spacer(),
                   const Icon(Icons.chevron_right_rounded),
                 ],
@@ -100,16 +101,9 @@ class TopicCard extends StatelessWidget {
                     color: Colors.amber.shade700,
                   ),
                   const SizedBox(width: 4),
-                  Text(
-                    'Badge Reward',
-                    style: theme.textTheme.bodySmall,
-                  ),
+                  Text('Badge Reward', style: theme.textTheme.bodySmall),
                   const SizedBox(width: 12),
-                  Icon(
-                    Icons.bolt,
-                    size: 16,
-                    color: Colors.amber.shade700,
-                  ),
+                  Icon(Icons.bolt, size: 16, color: Colors.amber.shade700),
                   const SizedBox(width: 2),
                   Text(
                     '+${topic.xpReward > 0 ? topic.xpReward : 20 + (index * 3)} XP',

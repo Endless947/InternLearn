@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:interactive_learn/features/content/data/models/slides/slide.dart';
 import 'package:interactive_learn/features/content/data/models/slides/slide_match.dart';
@@ -35,7 +36,6 @@ final class _MatchEntry extends _SlideEntry {
   @override
   int get order => match.order;
 }
-
 
 class SlideViewerBody extends HookConsumerWidget {
   final SlidesForSubtopic data;
@@ -104,138 +104,147 @@ class SlideViewerBody extends HookConsumerWidget {
 
     final isLast = pageIndex.value == entries.length - 1;
 
-
-
-    return  Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () async {
-              // final leave = await confirmQuit();
-              // if (leave && context.mounted) Navigator.pop(context);
-            },
-          ),
-          title: Text(title),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(10),
-            child: SegmentedProgress(
-              total: entries.length,
-              current: pageIndex.value,
-              completed: completedSet.value,
-            ),
-          ),
-        ),
-        body: PageView.builder(
-          controller: pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: entries.length,
-          itemBuilder: (context, i) {
-            final entry = entries[i];
-            if (entry is _ContentEntry) {
-              return ContentSlideWidget(key: ValueKey('c_$i'), slide: entry.slide);
-            } else if (entry is _McqEntry) {
-              return McqSlideWidget(
-                key: ValueKey('mcq_$i'),
-                mcq: entry.mcq,
-                onCompleted: () => markComplete(i),
-              );
-            } else if (entry is _MatchEntry) {
-              return MatchSlideWidget(
-                key: ValueKey('match_$i'),
-                match: entry.match,
-                onCompleted: () => markComplete(i),
-              );
-            }
-            return const SizedBox.shrink();
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () async {
+            // final leave = await confirmQuit();
+            // if (leave && context.mounted) context.pop();
           },
         ),
-        bottomNavigationBar: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Row(
-              children: [
-                // Back button
-                if (pageIndex.value > 0)
-                  OutlinedButton.icon(
-                    onPressed: () => goTo(pageIndex.value - 1),
-                    icon: const Icon(Icons.arrow_back, size: 18),
-                    label: const Text('Back'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    ),
-                  )
-                else
-                  const SizedBox(width: 80),
-
-                const Spacer(),
-
-                // Slide counter
-                Text(
-                  '${pageIndex.value + 1} / ${entries.length}',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(color: Colors.grey),
-                ),
-
-                const Spacer(),
-
-                // Next / Finish button
-                ElevatedButton.icon(
-                  onPressed: canProceed(pageIndex.value)
-                      ? () {
-                          if (isLast) {
-                            if (isFinishing.value) return;
-                            isFinishing.value = true;
-                            ref
-                                .read(progressActionsProvider.notifier)
-                                .completeSubtopic(subtopicId)
-                                .then((result) {
-                                  if (!context.mounted) return;
-
-                                  final rewards = <String>[];
-                                  if (result.subtopicCompleted) {
-                                    rewards.add('Subtopic complete');
-                                  }
-                                  if (result.topicCompleted) {
-                                    rewards.add('Topic unlocked');
-                                  }
-                                  if (result.chapterCompleted) {
-                                    rewards.add('Chapter conquered');
-                                  }
-
-                                  final gained = result.gainedXp;
-                                  final msg = gained > 0
-                                      ? 'You earned +$gained XP${rewards.isNotEmpty ? ' • ${rewards.join(' • ')}' : ''}'
-                                      : 'Already completed earlier. Keep practicing!';
-
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(msg)),
-                                  );
-                                  Navigator.pop(context);
-                                })
-                                .whenComplete(() => isFinishing.value = false);
-                          } else {
-                            goTo(pageIndex.value + 1);
-                          }
-                        }
-                      : null,
-                  icon: Icon(isLast ? Icons.emoji_events : Icons.arrow_forward, size: 18),
-                  label: Text(
-                    isLast
-                        ? (isFinishing.value ? 'Saving...' : 'Finish')
-                        : 'Next',
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  ),
-                ),
-              ],
-            ),
+        title: Text(title),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(10),
+          child: SegmentedProgress(
+            total: entries.length,
+            current: pageIndex.value,
+            completed: completedSet.value,
           ),
         ),
-      )
-    ;
+      ),
+      body: PageView.builder(
+        controller: pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: entries.length,
+        itemBuilder: (context, i) {
+          final entry = entries[i];
+          if (entry is _ContentEntry) {
+            return ContentSlideWidget(
+              key: ValueKey('c_$i'),
+              slide: entry.slide,
+            );
+          } else if (entry is _McqEntry) {
+            return McqSlideWidget(
+              key: ValueKey('mcq_$i'),
+              mcq: entry.mcq,
+              onCompleted: () => markComplete(i),
+            );
+          } else if (entry is _MatchEntry) {
+            return MatchSlideWidget(
+              key: ValueKey('match_$i'),
+              match: entry.match,
+              onCompleted: () => markComplete(i),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Row(
+            children: [
+              // Back button
+              if (pageIndex.value > 0)
+                OutlinedButton.icon(
+                  onPressed: () => goTo(pageIndex.value - 1),
+                  icon: const Icon(Icons.arrow_back, size: 18),
+                  label: const Text('Back'),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                )
+              else
+                const SizedBox(width: 80),
+
+              const Spacer(),
+
+              // Slide counter
+              Text(
+                '${pageIndex.value + 1} / ${entries.length}',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: Colors.grey),
+              ),
+
+              const Spacer(),
+
+              // Next / Finish button
+              ElevatedButton.icon(
+                onPressed: canProceed(pageIndex.value)
+                    ? () {
+                        if (isLast) {
+                          if (isFinishing.value) return;
+                          isFinishing.value = true;
+                          ref
+                              .read(progressActionsProvider.notifier)
+                              .completeSubtopic(subtopicId)
+                              .then((result) {
+                                if (!context.mounted) return;
+
+                                final rewards = <String>[];
+                                if (result.subtopicCompleted) {
+                                  rewards.add('Subtopic complete');
+                                }
+                                if (result.topicCompleted) {
+                                  rewards.add('Topic unlocked');
+                                }
+                                if (result.chapterCompleted) {
+                                  rewards.add('Chapter conquered');
+                                }
+
+                                final gained = result.gainedXp;
+                                final msg = gained > 0
+                                    ? 'You earned +$gained XP${rewards.isNotEmpty ? ' • ${rewards.join(' • ')}' : ''}'
+                                    : 'Already completed earlier. Keep practicing!';
+
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(SnackBar(content: Text(msg)));
+                                context.pop();
+                              })
+                              .whenComplete(() => isFinishing.value = false);
+                        } else {
+                          goTo(pageIndex.value + 1);
+                        }
+                      }
+                    : null,
+                icon: Icon(
+                  isLast ? Icons.emoji_events : Icons.arrow_forward,
+                  size: 18,
+                ),
+                label: Text(
+                  isLast
+                      ? (isFinishing.value ? 'Saving...' : 'Finish')
+                      : 'Next',
+                ),
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
-
-
 }

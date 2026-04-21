@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/auth/data/riverpod/auth_provider.dart';
 import 'package:interactive_learn/features/content/data/riverpod/content_provider.dart';
 import 'package:interactive_learn/core/skeleton/loading_skeletons.dart';
-import 'package:interactive_learn/features/content/presentation/screens/subjects_screen.dart';
 import 'package:interactive_learn/core/landing/widgets/subject_grid.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -29,9 +29,9 @@ class HomeScreen extends ConsumerWidget {
                 child: Text(
                   displayName[0].toUpperCase(),
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -41,11 +41,15 @@ class HomeScreen extends ConsumerWidget {
                   children: [
                     Text(
                       'Welcome, $displayName!',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Keep learning, keep growing.',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
                     ),
                   ],
                 ),
@@ -60,13 +64,12 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Text(
                 'Subjects',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SubjectsScreen()),
-                ),
+                onPressed: () => const SubjectsRoute().push(context),
                 child: const Text('See All'),
               ),
             ],
@@ -84,8 +87,10 @@ class HomeScreen extends ConsumerWidget {
             loading: () => const HomeSkeleton(),
             error: (e, _) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
-              child: Text('Failed to load subjects: $e',
-                  style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: Text(
+                'Failed to load subjects: $e',
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
             ),
           ),
         ],
@@ -93,4 +98,3 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 }
-

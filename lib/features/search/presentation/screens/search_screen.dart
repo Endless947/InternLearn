@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/search/data/models/search_result_item.dart';
 import 'package:interactive_learn/features/search/data/riverpod/search_provider.dart';
 import 'package:interactive_learn/core/skeleton/loading_skeletons.dart';
-import 'package:interactive_learn/features/content/presentation/screens/chapters_screen.dart';
-import 'package:interactive_learn/features/content/presentation/screens/subtopics_screen.dart';
-import 'package:interactive_learn/features/content/presentation/screens/topics_screen.dart';
 
 class SearchScreen extends HookConsumerWidget {
   const SearchScreen({super.key});
@@ -67,11 +65,17 @@ class SearchScreen extends HookConsumerWidget {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.travel_explore_rounded, size: 64, color: Colors.grey.shade300),
+                        Icon(
+                          Icons.travel_explore_rounded,
+                          size: 64,
+                          color: Colors.grey.shade300,
+                        ),
                         const SizedBox(height: 12),
                         Text(
                           'Search across all learning levels',
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.grey),
+                          style: Theme.of(
+                            context,
+                          ).textTheme.bodyLarge?.copyWith(color: Colors.grey),
                         ),
                       ],
                     ),
@@ -83,13 +87,15 @@ class SearchScreen extends HookConsumerWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.search_off, size: 64, color: Colors.grey.shade300),
+                              Icon(
+                                Icons.search_off,
+                                size: 64,
+                                color: Colors.grey.shade300,
+                              ),
                               const SizedBox(height: 12),
                               Text(
                                 'No results for "${debouncedQuery.value}"',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
+                                style: Theme.of(context).textTheme.bodyLarge
                                     ?.copyWith(color: Colors.grey),
                               ),
                             ],
@@ -97,14 +103,18 @@ class SearchScreen extends HookConsumerWidget {
                         );
                       }
 
-                      final subjectResults =
-                          results.where((r) => r.type == SearchEntityType.subject).toList();
-                      final chapterResults =
-                          results.where((r) => r.type == SearchEntityType.chapter).toList();
-                      final topicResults =
-                          results.where((r) => r.type == SearchEntityType.topic).toList();
-                      final subtopicResults =
-                          results.where((r) => r.type == SearchEntityType.subtopic).toList();
+                      final subjectResults = results
+                          .where((r) => r.type == SearchEntityType.subject)
+                          .toList();
+                      final chapterResults = results
+                          .where((r) => r.type == SearchEntityType.chapter)
+                          .toList();
+                      final topicResults = results
+                          .where((r) => r.type == SearchEntityType.topic)
+                          .toList();
+                      final subtopicResults = results
+                          .where((r) => r.type == SearchEntityType.subtopic)
+                          .toList();
 
                       return ListView(
                         children: [
@@ -186,23 +196,25 @@ class SearchScreen extends HookConsumerWidget {
                 const SizedBox(width: 6),
                 Text(
                   label,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
                 ),
               ],
             ),
           ),
         ),
-        ...items.map((item) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: _ResultCard(
-                icon: _iconForType(item.type),
-                title: item.title,
-                subtitle: item.subtitle,
-                onTap: () => _openResult(context, item),
-              ),
-            )),
+        ...items.map(
+          (item) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _ResultCard(
+              icon: _iconForType(item.type),
+              title: item.title,
+              subtitle: item.subtitle,
+              onTap: () => _openResult(context, item),
+            ),
+          ),
+        ),
         const SizedBox(height: 8),
       ],
     );
@@ -211,50 +223,34 @@ class SearchScreen extends HookConsumerWidget {
   void _openResult(BuildContext context, SearchResultItem result) {
     switch (result.type) {
       case SearchEntityType.subject:
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => ChaptersPage(subject: result.subject)),
-        );
+        ChaptersRoute($extra: result.subject).push(context);
         break;
       case SearchEntityType.chapter:
         final chapter = result.chapter;
         if (chapter == null) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TopicsScreen(subject: result.subject, chapter: chapter),
-          ),
-        );
+        TopicsRoute(
+          $extra: TopicsNavData(subject: result.subject, chapter: chapter),
+        ).push(context);
         break;
       case SearchEntityType.topic:
         final chapter = result.chapter;
         final topic = result.topic;
         if (chapter == null || topic == null) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SubtopicsScreen(
-              subject: result.subject,
-              chapter: chapter,
-              topic: topic,
-            ),
+        SubtopicsRoute(
+          $extra: SubtopicsNavData(
+            subject: result.subject,
+            chapter: chapter,
+            topic: topic,
           ),
-        );
+        ).push(context);
         break;
       case SearchEntityType.subtopic:
-        final chapter = result.chapter;
-        final topic = result.topic;
-        if (chapter == null || topic == null) return;
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => SubtopicsScreen(
-              subject: result.subject,
-              chapter: chapter,
-              topic: topic,
-            ),
-          ),
-        );
+        final subtopic = result.subtopic;
+        if (subtopic == null) return;
+        SlideViewerRoute(
+          subtopicId: subtopic.id,
+          subtopicTitle: subtopic.title,
+        ).push(context);
         break;
     }
   }
@@ -291,8 +287,8 @@ class _ResultCard extends StatelessWidget {
                   Text(
                     title,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   const SizedBox(height: 2),
                   Text(

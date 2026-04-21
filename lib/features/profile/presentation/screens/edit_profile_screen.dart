@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/profile/data/riverpod/user_profile_provider.dart';
 import 'package:interactive_learn/features/auth/services/auth_service.dart';
 import 'package:interactive_learn/core/skeleton/loading_skeletons.dart';
-import 'package:interactive_learn/features/profile/presentation/screens/avatar_picker_screen.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -33,12 +34,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       await AuthService.updateProfile(name: _nameController.text);
       if (!mounted) return;
       ref.invalidate(userProfileProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Profile updated')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Profile updated')));
     } finally {
       if (mounted) setState(() => _isSaving = false);
-      Navigator.of(context).pop();
+      if (mounted) context.pop();
     }
   }
 
@@ -122,7 +123,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                   const SizedBox(height: 12),
                   Card(
                     child: ListTile(
-                      leading: const Icon(Icons.face_retouching_natural_rounded),
+                      leading: const Icon(
+                        Icons.face_retouching_natural_rounded,
+                      ),
                       title: const Text('Avatar'),
                       subtitle: const Text('Choose from random avatars'),
                       trailing: Row(
@@ -142,20 +145,22 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                         ],
                       ),
                       onTap: () async {
-                        final selectedSeed = await Navigator.of(context)
-                            .push<String>(
-                          MaterialPageRoute(
-                            builder: (_) => AvatarPickerScreen(currentSeed: profile.avatarSeed),
-                          ),
-                        );
+                        final selectedSeed = await AvatarPickerRoute(
+                          currentSeed: profile.avatarSeed,
+                        ).push<String>(context);
                         if (!mounted) return;
-                        if (selectedSeed != null && selectedSeed.trim().isNotEmpty) {
+                        if (selectedSeed != null &&
+                            selectedSeed.trim().isNotEmpty) {
                           setState(() => _selectedAvatarSeed = selectedSeed);
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Avatar selected, remember to save changes')),
+                              const SnackBar(
+                                content: Text(
+                                  'Avatar selected, remember to save changes',
+                                ),
+                              ),
                             );
-                          } 
+                          }
                         }
                         ref.invalidate(userProfileProvider);
                       },

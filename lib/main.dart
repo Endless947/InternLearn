@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:interactive_learn/features/auth/data/riverpod/auth_provider.dart';
+import 'package:interactive_learn/core/routes/app_router.dart';
 import 'package:interactive_learn/core/theme/riverpod/theme_provider.dart';
-import 'package:interactive_learn/core/singleton.dart';
-import 'package:interactive_learn/core/skeleton/loading_skeletons.dart';
-import 'package:interactive_learn/features/auth/presentation/screens/login_screen.dart';
-import 'package:interactive_learn/core/landing/screens/tab_widget_tree.dart';
 import 'package:interactive_learn/core/theme/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,36 +24,13 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = ref.watch(appThemeProvider);
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Intern Learn',
       theme: MainAppTheme.light,
       darkTheme: MainAppTheme.dark,
       themeMode: theme,
-      home: const AuthGate(),
-    );
-  }
-}
-
-/// The `AuthGate` class is a Flutter widget that conditionally displays either a `TabWidgetTree` or a
-/// `LoginPage` based on the authentication state, handling data loading and error cases.
-class AuthGate extends ConsumerWidget {
-  const AuthGate({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final authAsync = ref.watch(authStateProvider);
-    return authAsync.when(
-      data: (state) {
-        if (state.session != null) return const TabWidgetTree();
-        return const LoginScreen();
-      },
-      loading: () {
-        // Use synchronous session to avoid a white flash on re-launch
-        if (supabase.auth.currentSession != null) return const TabWidgetTree();
-        return const Scaffold(body: SafeArea(child: AppListSkeleton(itemCount: 5)));
-      },
-      error: (_, _) => const LoginScreen(),
+      routerConfig: appRouter,
     );
   }
 }

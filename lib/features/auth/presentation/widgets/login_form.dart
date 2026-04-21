@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/auth/services/auth_service.dart';
 import 'package:interactive_learn/core/singleton.dart';
-import 'package:interactive_learn/features/auth/presentation/screens/signup_screen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginForm extends HookConsumerWidget {
@@ -92,8 +92,7 @@ class LoginForm extends HookConsumerWidget {
                       ? Icons.visibility_off_outlined
                       : Icons.visibility_outlined,
                 ),
-                onPressed: () =>
-                    obscurePassword.value = !obscurePassword.value,
+                onPressed: () => obscurePassword.value = !obscurePassword.value,
               ),
             ),
             validator: (value) {
@@ -136,12 +135,7 @@ class LoginForm extends HookConsumerWidget {
             children: [
               const Text("Don't have an account? "),
               GestureDetector(
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const SignupScreen(),
-                  ),
-                ),
+                onTap: () => const SignupRoute().push(context),
                 child: Text(
                   'Sign Up',
                   style: TextStyle(

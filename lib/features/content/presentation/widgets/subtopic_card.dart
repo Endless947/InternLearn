@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:interactive_learn/core/routes/app_routes.dart';
 import 'package:interactive_learn/features/content/data/models/subtopic.dart';
-import 'package:interactive_learn/features/content/presentation/slides/slide_viewer_screen.dart';
 
 class SubtopicCard extends StatelessWidget {
   final Subtopic subtopic;
@@ -25,15 +25,10 @@ class SubtopicCard extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => SlideViewerScreen(
-                subtopicId: subtopic.id,
-                subtopicTitle: subtopic.title,
-              ),
-            ),
-          );
+          SlideViewerRoute(
+            subtopicId: subtopic.id,
+            subtopicTitle: subtopic.title,
+          ).push(context);
         },
         child: Ink(
           padding: const EdgeInsets.all(14),
@@ -74,10 +69,7 @@ class SubtopicCard extends StatelessWidget {
                     ),
                   ),
                   if (isCompleted)
-                    const Icon(
-                      Icons.check_circle_rounded,
-                      color: Colors.green,
-                    ),
+                    const Icon(Icons.check_circle_rounded, color: Colors.green),
                 ],
               ),
               const SizedBox(height: 10),
@@ -88,7 +80,8 @@ class SubtopicCard extends StatelessWidget {
                   _chip(
                     context,
                     icon: Icons.whatshot_rounded,
-                    label: '+${subtopic.xpReward > 0 ? subtopic.xpReward : 12 + index} XP',
+                    label:
+                        '+${subtopic.xpReward > 0 ? subtopic.xpReward : 12 + index} XP',
                     color: Colors.deepOrange,
                   ),
                   _chip(
