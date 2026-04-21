@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import 'package:interactive_learn/core/theme/theme.dart';
 import 'package:interactive_learn/core/routes/app_router.dart';
 import 'package:interactive_learn/core/theme/riverpod/theme_provider.dart';
-import 'package:interactive_learn/core/theme/theme.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
