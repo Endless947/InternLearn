@@ -6,6 +6,8 @@ import 'package:nexus/core/routes/profile/profile_routes.dart';
 import 'package:nexus/core/routes/shell/shell_navigation_scaffold.dart';
 import 'package:nexus/core/routes/shell/shell_routes.dart';
 import 'package:nexus/core/singleton.dart';
+import 'package:nexus/features/profile/presentation/screens/notifications_settings_screen.dart';
+import 'package:nexus/features/profile/presentation/screens/theme_settings_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutePaths.rootPath,
@@ -34,6 +36,14 @@ final GoRouter appRouter = GoRouter(
     $slideViewerRoute,
     $editProfileRoute,
     $avatarPickerRoute,
+    GoRoute(
+      path: AppRoutePaths.notificationsSettingsPath,
+      builder: (context, state) => const NotificationsSettingsScreen(),
+    ),
+    GoRoute(
+      path: AppRoutePaths.themeSettingsPath,
+      builder: (context, state) => const ThemeSettingsScreen(),
+    ),
   ],
   redirect: (context, state) {
     final isLoggedIn = supabase.auth.currentSession != null;

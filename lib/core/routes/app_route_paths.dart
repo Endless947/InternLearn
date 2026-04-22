@@ -9,6 +9,8 @@ abstract final class AppRoutePaths {
   static const leaderboardPath = '/leaderboard';
   static const progressPath = '/progress';
   static const profilePath = '/profile';
+  static const notificationsSettingsPath = '/profile/notifications';
+  static const themeSettingsPath = '/profile/theme';
 
   static final root = Path('/');
   static final login = Path('login');
@@ -22,4 +24,6 @@ abstract final class AppRoutePaths {
 
   static final editProfile = Path('profile/edit');
   static final avatarPicker = Path('profile/avatar');
+  static final notificationsSettings = Path('profile/notifications');
+  static final themeSettings = Path('profile/theme');
 }
