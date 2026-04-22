@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:nexus/core/widgets/list_skeleton.dart';
 import 'package:nexus/features/content/data/riverpod/content_provider.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
 import 'package:nexus/features/content/presentation/widgets/subject_card.dart';
 
 class SubjectsScreen extends ConsumerWidget {
@@ -9,7 +9,9 @@ class SubjectsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final subjectsAsync = ref.watch(subjectProvider);
+
     return Scaffold(
       appBar: AppBar(title: const Text('All Subjects')),
       body: subjectsAsync.when(
@@ -25,10 +27,9 @@ class SubjectsScreen extends ConsumerWidget {
                 SubjectCard(subject: subjects[index]),
           );
         },
-        loading: () => const AppListSkeleton(),
+        loading: () => const ListSkeleton(),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
   }
 }
-

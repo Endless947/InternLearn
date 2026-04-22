@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nexus/core/routes/app_routes.dart';
+import 'package:nexus/core/landing/widgets/home_skeleton.dart';
 import 'package:nexus/features/auth/data/riverpod/auth_provider.dart';
 import 'package:nexus/features/content/data/riverpod/content_provider.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
 import 'package:nexus/core/landing/widgets/subject_grid.dart';
 
 class HomeScreen extends ConsumerWidget {

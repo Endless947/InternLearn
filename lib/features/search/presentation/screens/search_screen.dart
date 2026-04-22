@@ -3,9 +3,10 @@ import 'package:flutter_debouncer/flutter_debouncer.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nexus/core/routes/app_routes.dart';
+import 'package:nexus/core/widgets/list_skeleton.dart';
 import 'package:nexus/features/search/data/models/search_result_item.dart';
 import 'package:nexus/features/search/data/riverpod/search_provider.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
+import 'package:nexus/features/search/presentation/widgets/result_cart.dart';
 
 class SearchScreen extends HookConsumerWidget {
   const SearchScreen({super.key});
@@ -146,7 +147,7 @@ class SearchScreen extends HookConsumerWidget {
                         ],
                       );
                     },
-                    loading: () => const AppListSkeleton(),
+                    loading: () => const ListSkeleton(),
                     error: (e, _) => Center(child: Text('Error: $e')),
                   ),
           ),
@@ -207,7 +208,7 @@ class SearchScreen extends HookConsumerWidget {
         ...items.map(
           (item) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: _ResultCard(
+            child: ResultCard(
               icon: _iconForType(item.type),
               title: item.title,
               subtitle: item.subtitle,
@@ -253,64 +254,5 @@ class SearchScreen extends HookConsumerWidget {
         ).push(context);
         break;
     }
-  }
-}
-
-class _ResultCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  const _ResultCard({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1.5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
-        child: Row(
-          children: [
-            CircleAvatar(child: Icon(icon)),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            FilledButton.tonal(
-              onPressed: onTap,
-              style: FilledButton.styleFrom(
-                visualDensity: VisualDensity.compact,
-              ),
-              child: const Text('Go To'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

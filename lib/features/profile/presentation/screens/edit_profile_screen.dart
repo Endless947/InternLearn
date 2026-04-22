@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nexus/core/routes/app_routes.dart';
+import 'package:nexus/core/widgets/list_skeleton.dart';
 import 'package:nexus/features/profile/data/riverpod/user_profile_provider.dart';
 import 'package:nexus/features/auth/services/auth_service.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
@@ -50,7 +50,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Edit Profile')),
       body: profileAsync.when(
-        loading: () => const AppListSkeleton(),
+        loading: () => const ListSkeleton(),
         error: (e, _) => Center(child: Text('Error: $e')),
         data: (profile) {
           if (profile == null) {

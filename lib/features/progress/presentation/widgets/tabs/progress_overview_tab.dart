@@ -9,10 +9,11 @@ class ProgressOverviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final totalCompletions =
-        summary.completedChapters + summary.completedTopics + summary.completedSubtopics;
+        summary.completedChapters +
+        summary.completedTopics +
+        summary.completedSubtopics;
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+    return Column(
       children: [
         _OverviewTile(
           title: 'Consistency',
@@ -23,7 +24,8 @@ class ProgressOverviewTab extends StatelessWidget {
         const SizedBox(height: 12),
         _OverviewTile(
           title: 'Unlock Path',
-          subtitle: 'Finish subtopics to auto-unlock topic and chapter rewards.',
+          subtitle:
+              'Finish subtopics to auto-unlock topic and chapter rewards.',
           icon: Icons.lock_open_rounded,
           color: Colors.green,
         ),
@@ -74,7 +76,9 @@ class _OverviewTile extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),

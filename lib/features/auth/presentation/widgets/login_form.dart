@@ -31,6 +31,9 @@ class LoginForm extends HookConsumerWidget {
 
       try {
         await AuthService.login(email, password);
+        if (context.mounted) {
+          HomeTabRoute().go(context);
+        }
       } on AuthException catch (e) {
         errorMessage.value = e.message;
       } catch (e) {

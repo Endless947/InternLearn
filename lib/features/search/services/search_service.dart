@@ -10,8 +10,7 @@ class SearchService {
     final q = query.trim();
     if (q.isEmpty) return [];
 
-    final escaped = q.replaceAll('%', r'\%').replaceAll('_', r'\_');
-    final likePattern = '%$escaped%';
+    final likePattern = '%$q%';
 
     try {
       final subjectsFuture = supabase

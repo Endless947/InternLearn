@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:nexus/core/routes/app_routes.dart';
+import 'package:nexus/features/profile/presentation/widgets/profile_skeleton.dart';
 import 'package:nexus/features/auth/data/riverpod/auth_provider.dart';
 import 'package:nexus/core/theme/riverpod/theme_provider.dart';
 import 'package:nexus/features/profile/data/riverpod/user_profile_provider.dart';
 import 'package:nexus/core/singleton.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 class ProfileScreen extends ConsumerWidget {
@@ -40,48 +40,55 @@ class ProfileScreen extends ConsumerWidget {
             ? profile!.avatarSeed
             : 'guest_$fallbackName';
 
-        return SingleChildScrollView(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+        return SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(16),
             children: [
               const SizedBox(height: 16),
-              Container(
-                width: 104,
-                height: 104,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                ),
-                child: ClipOval(
-                  child: RandomAvatar(
-                    avatarSeed,
-                    width: 104,
-                    height: 104,
-                    trBackground: true,
+              Center(
+                child: Container(
+                  width: 104,
+                  height: 104,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                  child: ClipOval(
+                    child: RandomAvatar(
+                      avatarSeed,
+                      width: 104,
+                      height: 104,
+                      trBackground: true,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 16),
-              Text(
-                displayName,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
+              Center(
+                child: Text(
+                  displayName,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               const SizedBox(height: 4),
-              Text(
-                profile?.email.isNotEmpty == true ? profile!.email : email,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+              Center(
+                child: Text(
+                  profile?.email.isNotEmpty == true ? profile!.email : email,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+                ),
               ),
               const SizedBox(height: 8),
-              Text(
-                'XP: ${profile?.totalXp ?? 0}',
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w700,
+              Center(
+                child: Text(
+                  'XP: ${profile?.totalXp ?? 0}',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
               const SizedBox(height: 24),

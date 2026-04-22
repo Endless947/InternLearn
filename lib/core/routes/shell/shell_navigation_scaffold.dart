@@ -78,7 +78,7 @@ class ShellNavigationScaffold extends StatelessWidget {
           TabItem(
             icon: Icons.emoji_events_outlined,
             activeIcon: Icons.emoji_events,
-            title: 'Leaderboard',
+            title: 'Rank',
           ),
           TabItem(
             icon: Icons.show_chart,

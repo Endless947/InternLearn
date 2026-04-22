@@ -4,7 +4,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'search_provider.g.dart';
 
-@Riverpod(keepAlive: true)
+@riverpod
 FutureOr<List<SearchResultItem>> contentSearch(Ref ref, String query) {
   return SearchService.searchContent(query);
 }

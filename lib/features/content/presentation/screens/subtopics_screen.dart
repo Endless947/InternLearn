@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:nexus/core/widgets/list_skeleton.dart';
 import 'package:nexus/features/content/data/models/chapter.dart';
 import 'package:nexus/features/content/data/models/subject.dart';
 import 'package:nexus/features/content/data/models/topic.dart';
 import 'package:nexus/features/content/data/riverpod/content_provider.dart';
 import 'package:nexus/features/progress/data/riverpod/progress_provider.dart';
-import 'package:nexus/core/skeleton/loading_skeletons.dart';
 import 'package:nexus/features/content/presentation/widgets/subtopic_card.dart';
 
 class SubtopicsScreen extends ConsumerWidget {
@@ -65,11 +65,11 @@ class SubtopicsScreen extends ConsumerWidget {
                 );
               },
             ),
-            loading: () => const AppListSkeleton(),
+            loading: () => const ListSkeleton(),
             error: (e, _) => Center(child: Text('Error: $e')),
           );
         },
-        loading: () => const AppListSkeleton(),
+        loading: () => const ListSkeleton(),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
