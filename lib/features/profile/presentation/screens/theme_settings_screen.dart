@@ -19,47 +19,32 @@ class ThemeSettingsScreen extends ConsumerWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Column(
-              children: [
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.light,
-                  groupValue: themeMode,
-                  onChanged: (value) {
-                    if (value != null) {
-                      themeNotifier.setThemeMode(value);
-                    }
-                  },
-                  title: const Text('Light'),
-                  subtitle: const Text('Always use the light theme.'),
-                  secondary: const Icon(Icons.light_mode_outlined),
-                ),
-                const Divider(height: 1),
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.dark,
-                  groupValue: themeMode,
-                  onChanged: (value) {
-                    if (value != null) {
-                      themeNotifier.setThemeMode(value);
-                    }
-                  },
-                  title: const Text('Dark'),
-                  subtitle: const Text('Always use the dark theme.'),
-                  secondary: const Icon(Icons.dark_mode_outlined),
-                ),
-                const Divider(height: 1),
-                RadioListTile<ThemeMode>(
-                  value: ThemeMode.system,
-                  groupValue: themeMode,
-                  onChanged: (value) {
-                    if (value != null) {
-                      themeNotifier.setThemeMode(value);
-                    }
-                  },
-                  title: const Text('System'),
-                  subtitle: const Text('Follow your phone theme settings.'),
-                  secondary: const Icon(Icons.settings_suggest_outlined),
-                ),
-              ],
+            child: RadioGroup<ThemeMode>(
+              groupValue: themeMode,
+              onChanged: (value) {
+                if (value != null) {
+                  themeNotifier.setThemeMode(value);
+                }
+              },
+              child: Column(
+                children: [
+                  RadioListTile(
+                    value: ThemeMode.system,
+
+                    title: const Text('System Default'),
+                  ),
+                  RadioListTile(
+                    value: ThemeMode.light,
+
+                    title: const Text('Light Theme'),
+                  ),
+                  RadioListTile(
+                    value: ThemeMode.dark,
+
+                    title: const Text('Dark Theme'),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 12),

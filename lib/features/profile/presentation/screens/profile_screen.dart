@@ -50,7 +50,6 @@ class ProfileScreen extends ConsumerWidget {
         if (context.mounted) {
           LoginRoute().go(context);
         }
-        // AuthGate in main.dart will automatically navigate to LoginPage
       } catch (e) {
         logger.e('Logout error', error: e);
       }
